@@ -1,30 +1,39 @@
 <template>
-  <nav>
-    <router-link to="/">Home</router-link> |
-    <router-link to="/about">About</router-link>
-  </nav>
-  <router-view/>
+  <!-- 1.1 使用A模块的state数据 -->
+  <p>{{ $store.state.moduleA.userName }}</p>
+  <!-- 1.2.使用A模块的getters -->
+  <p>{{ $store.getters.newName }}</p>
+
+  <!-- 2.1 使用B模块的state数据 (开启了命名空间)-->
+  <p>{{ $store.state.moduleB.userName }}</p>
+  <!-- 2.2.使用B模块的getters (带命名空间的使用)-->
+  <p>{{ $store.getters["moduleB/newName"] }}</p>
+  <!-- 2.3  -->
+  <button @click="mutationsFn">mutations</button>
+  <button @click="actionsFn">actions</button>
 </template>
+<script>
+import { useStore } from "vuex";
+export default {
+  name: "App",
+  setup() {
+    const store = useStore();
+    const mutationsFn = () => {
+      //  2.3提交B模块的修改
+      store.commit("moduleB/updateName");
+    };
 
-<style lang="less">
-#app {
-  font-family: Avenir, Helvetica, Arial, sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  text-align: center;
-  color: #2c3e50;
-}
+    const actionsFn = () => {
+      // 2.4调用B模块的actions
+      store.dispatch('moduleB/updateName')
+    };
 
-nav {
-  padding: 30px;
+    return {
+      mutationsFn,
+      actionsFn,
+    };
+  },
+};
+</script>
 
-  a {
-    font-weight: bold;
-    color: #2c3e50;
-
-    &.router-link-exact-active {
-      color: #42b983;
-    }
-  }
-}
-</style>
+<style lang="less"></style>
