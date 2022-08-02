@@ -3,7 +3,7 @@
  * @Author: JLX
  * @Date: 2022-07-25 10:08:57
  * @LastEditors: JLX
- * @LastEditTime: 2022-07-26 14:47:54
+ * @LastEditTime: 2022-08-02 14:28:32
 -->
 <template>
   <ul class="app-header-nav">
@@ -11,7 +11,7 @@
     <li class="home"><RouterLink to="/">首页</RouterLink></li>
 
     <!-- 一级分类 -->
-    <li v-for="item in list" :key="item.id" @mouseenter="show(item)" @mouseleave="hide(item)">
+    <li v-for="item in list" :key="item.id" @mousemove="show(item)" @mouseleave="hide(item)">
       <router-link @click="hide(item)" :to="`/category/${item.id}`">
         {{ item.name }}
       </router-link>

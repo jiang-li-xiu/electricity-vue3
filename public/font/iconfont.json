@@ -6,6 +6,27 @@
   "description": "",
   "glyphs": [
     {
+      "icon_id": "4448526",
+      "name": "check-checked",
+      "font_class": "check-checked",
+      "unicode": "e667",
+      "unicode_decimal": 58983
+    },
+    {
+      "icon_id": "11420351",
+      "name": "un-checked-o",
+      "font_class": "un-checked-o",
+      "unicode": "e6b0",
+      "unicode_decimal": 59056
+    },
+    {
+      "icon_id": "17412093",
+      "name": "Checkbox Unchecked",
+      "font_class": "CheckboxUnchecked",
+      "unicode": "e652",
+      "unicode_decimal": 58962
+    },
+    {
       "icon_id": "577402",
       "name": "向右1",
       "font_class": "xiangyou1",

@@ -1,8 +1,8 @@
 @font-face {
   font-family: "iconfont"; /* Project id 3522828 */
-  src: url('iconfont.woff2?t=1658976304970') format('woff2'),
-       url('iconfont.woff?t=1658976304970') format('woff'),
-       url('iconfont.ttf?t=1658976304970') format('truetype');
+  src: url('iconfont.woff2?t=1659429647179') format('woff2'),
+       url('iconfont.woff?t=1659429647179') format('woff'),
+       url('iconfont.ttf?t=1659429647179') format('truetype');
 }
 
 .iconfont {
@@ -11,6 +11,18 @@
   font-style: normal;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+}
+
+.icon-check-checked:before {
+  content: "\e667";
+}
+
+.icon-un-checked-o:before {
+  content: "\e6b0";
+}
+
+.icon-CheckboxUnchecked:before {
+  content: "\e652";
 }
 
 .icon-xiangyou1:before {

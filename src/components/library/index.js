@@ -3,7 +3,7 @@
  * @Author: JLX
  * @Date: 2022-07-26 15:04:19
  * @LastEditors: JLX
- * @LastEditTime: 2022-07-28 15:23:51
+ * @LastEditTime: 2022-07-28 17:12:17
  */
 // 插件：扩展vue原有的功能：全局组件，自定义指令，挂载原型方法，vue3没有全局过滤器
 
@@ -39,7 +39,7 @@ import defaultImg from '@/assets/images/src.jpg'
 
 // context(目录路径, 是否加载了目录, 加载文件的匹配正则) 
 const importFn = require.context('./', false, /\.vue$/) //加载后缀是.vue的文件
-console.log(importFn.keys());
+    // console.log(importFn.keys());
 
 //            -------批量注册组件end--------
 
