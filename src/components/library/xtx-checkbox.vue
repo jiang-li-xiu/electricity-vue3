@@ -1,0 +1,95 @@
+<!--
+ * @Descripttion: 
+ * @Author: JLX
+ * @Date: 2022-08-02 16:39:01
+ * @LastEditors: JLX
+ * @LastEditTime: 2022-08-02 17:16:00
+-->
+<template>
+  <div class="xtx-checkbox" @click="changeChecked()">
+    <i v-if="checked" class="iconfont icon-un-checked-o"></i>
+    <i v-else class="iconfont icon-CheckboxUnchecked"></i>
+    <!--通过$slots.default判断 是否有插槽内容 有则显示 -->
+    <span v-if="$slots.default"><slot /></span>
+  </div>
+</template>
+<script>
+import { ref, watch } from "vue";
+import { useVModel } from "@vueuse/core";
+// v-model ===> :modelValue + @update:modelValue
+export default {
+  name: "XtxCheckbox",
+  props: {
+    // 接收是否选中
+    modelValue: {
+      type: Boolean,
+      default: false,
+    },
+  },
+  setup(props, { emit }) {
+    /**
+     * 方法一
+     */
+    // // 默认不选中
+    // const checked = ref(false);
+    // // 改变复选框状态
+    // const changeChecked = () => {
+    //   checked.value = !checked.value;
+    //   // 使用emit通知父组件数据的改变（传递值用）
+    //   emit("update:modelValue", checked.value);
+    // };
+    // // 使用监听器，得到父组件传递数据，给checked数据
+    // watch(
+    //   () => props.modelValue,
+    //   () => {
+    //     // 接收值用
+    //     checked.value = props.modelValue;
+    //   },
+    //   { immediate: true }
+    // );
+    // return {
+    //   checked,
+    //   changeChecked,
+    // };
+
+    /**
+     * 方法二: @vueuse/core组件库 useVModel实现双向绑定
+     * 1. 使用props接收modelValue
+     * 2. 使用useVModel来包装props中的modelValue属性数据
+     * 3. 将来在使用checked.value就是使用父组件数据
+     * 4. 在使用checked.value = '数据' 赋值, 触发emit('update:modelValue', '数据')
+     */
+    const checked = useVModel(props, "modelValue", emit);
+    const changeChecked = () => {
+      const newVal = !checked.value;
+      // 通知父组件数据
+      checked.value = newVal;
+      // 让组件支持change事件
+      emit("change", newVal);
+    };
+    return {
+      checked,
+      changeChecked,
+    };
+  },
+};
+</script>
+<style scoped lang="less">
+.xtx-checkbox {
+  display: inline-block;
+  margin-right: 2px;
+  .icon-un-checked-o {
+    color: @xtxColor;
+    ~ span {
+      color: @xtxColor;
+    }
+  }
+  i {
+    position: relative;
+    top: 1px;
+  }
+  span {
+    margin-left: 2px;
+  }
+}
+</style>

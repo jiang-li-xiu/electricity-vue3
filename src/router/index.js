@@ -3,7 +3,7 @@
  * @Author: JLX
  * @Date: 2022-07-21 15:11:37
  * @LastEditors: JLX
- * @LastEditTime: 2022-07-26 10:08:46
+ * @LastEditTime: 2022-08-02 14:25:33
  */
 import { createRouter, createWebHashHistory } from 'vue-router'
 
@@ -34,7 +34,18 @@ const routes = [
 
 const router = createRouter({
     history: createWebHashHistory(),
-    routes
+    routes,
+    // 每次切换路由滚动到页面顶部
+    scrollBehavior() {
+        return { left: 0, top: 0 }
+    }
+    /**
+     * vue2.0通过x和y控制
+     * scrollBehavior() {
+        return { x: 0, y: 0 }
+        }
+     */
+
 })
 
 export default router
