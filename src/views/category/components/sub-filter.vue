@@ -3,16 +3,16 @@
  * @Author: JLX
  * @Date: 2022-08-02 15:04:35
  * @LastEditors: JLX
- * @LastEditTime: 2022-08-02 16:02:47
+ * @LastEditTime: 2022-08-04 17:57:39
 -->
 <template>
   <div class="sub-filter" v-if="filterData && !filterLoading">
     <div class="item">
       <div class="head">品牌：</div>
       <div class="body">
-        <!-- 默认选中全部 点击将id变为当前选中id -->
+        <!-- 默认选中全部 点击将id变为当前选中id  filterData.brands.selectedBrand = item.id -->
         <a
-          @click="filterData.brands.selectedBrand = item.id"
+          @click="changeBrand(item.id)"
           :class="{ active: item.id === filterData.brands.selectedBrand }"
           href="javascript:;"
           v-for="item in filterData.brands"
@@ -26,8 +26,9 @@
     <div class="item" v-for="item in filterData.saleProperties" :key="item.id">
       <div class="head">{{ item.name }}：</div>
       <div class="body">
+        <!-- item.selectedProp = prop.id -->
         <a
-          @click="item.selectedProp = prop.id"
+          @click="changeProp(item, prop.id)"
           :class="{ active: prop.id === item.selectedProp }"
           href="javascript:;"
           v-for="prop in item.properties"
@@ -54,7 +55,7 @@ import { ref, watch } from "vue";
 import { useRoute } from "vue-router";
 export default {
   name: "SubFilter",
-  setup() {
+  setup(props, { emit }) {
     const route = useRoute();
     // 监听二级类目id的变化获取筛选数据
     const filterData = ref(null);
@@ -84,12 +85,36 @@ export default {
             filterLoading.value = false;
           });
         }
-      }
+      },
+      { immediate: true }
     );
+
+    // 获取筛选参数的函数
+    const getFilterParams = () => {
+      // 参考数据：{brandId:'',attrs:[{groupName:'',propertyName:''},...]}
+
+      return;
+    };
+
+    // 1. 记录当前选择的品牌
+    const changeBrand = (brandId) => {
+      if (filterData.selectedBrand === brandId) return;
+      filterData.selectedBrand = brandId;
+      emit("filter-change", filterData.selectedBrand);
+    };
+    // 2. 记录已选择的销售属性
+    const changeProp = (item, propId) => {
+      if (item.selectedProp === propId) return;
+      item.selectedProp = propId;
+      emit("prop-change");
+    };
 
     return {
       filterData,
       filterLoading,
+      changeBrand,
+      changeProp,
+      getFilterParams,
     };
   },
 };

@@ -3,7 +3,7 @@
  * @Author: JLX
  * @Date: 2022-07-25 10:25:32
  * @LastEditors: JLX
- * @LastEditTime: 2022-08-02 15:15:08
+ * @LastEditTime: 2022-08-04 16:16:17
  */
 // 定义分类相关API接口函数
 
@@ -31,4 +31,12 @@ export const findTopCategory = (id) => {
  */
 export const findSubCategoryFilterData = (id) => {
     return request('/category/sub/filter', 'get', { id })
+}
+
+/**
+ * 获取分类下商品（带筛选条件）
+ * @returns {Object} params
+ */
+export const findSubCategoryGoods = (params) => {
+    return request('/category/goods/temporary', 'post', params)
 }
