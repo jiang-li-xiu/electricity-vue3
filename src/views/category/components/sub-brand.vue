@@ -3,7 +3,7 @@
  * @Author: JLX
  * @Date: 2022-08-02 14:38:09
  * @LastEditors: JLX
- * @LastEditTime: 2022-08-02 15:03:36
+ * @LastEditTime: 2022-08-04 17:25:05
 -->
 <template>
   <XtxBread>
@@ -20,7 +20,7 @@
       </XtxBreadItem>
     </Transition>
 
-    <Transition name="fade-rigth">
+    <Transition name="fade-rigth" >
       <!-- 面包屑二级类目-->
       <XtxBreadItem v-if="category.sub" :key="category.sub.id">
         {{ category.sub.name }}
