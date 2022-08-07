@@ -2,8 +2,8 @@
  * @Descripttion: 
  * @Author: JLX
  * @Date: 2022-07-25 11:02:31
- * @LastEditors: JLX
- * @LastEditTime: 2022-08-04 17:52:08
+ * @LastEditors: jiang-li-xiu 2663282851@qq.com
+ * @LastEditTime: 2022-08-07 14:05:35
 -->
 <template>
   <div class="sub-category">
@@ -11,7 +11,7 @@
       <!-- 面包屑 -->
       <sub-brand></sub-brand>
       <!-- 筛选区 -->
-      <SubFilter></SubFilter>
+      <SubFilter @filter-change="filterChange"></SubFilter>
       <!--测试全选组件  -->
       <!-- <xtx-checkbox v-model="isAllChecked">全选</xtx-checkbox> -->
       <!-- 商品面板（排序组件 + 列表） -->
@@ -108,22 +108,31 @@ export default {
     // 1. 更改排序自己的筛选属性，重新请求
     // 来自sub-sort发射的事件 sortParams:点击的筛选条件
     const sortChange = (sortParams) => {
+      // finished.value = false;
       // console.log(sortParams);
       // 合并请求参数，保留之前参数
       reqParams = { ...reqParams, ...sortParams };
-      reqParams.page = 1
+      reqParams.page = 1;
       goodsList.value = [];
       finished.value = false;
     };
 
     // 2. 更改筛选组件的筛选数据，重新请求
-   
+    const filterChange = (filterParams) => {
+      console.log(filterParams);
+      finished.value = false;
+      reqParams = { ...reqParams, ...filterParams };
+      reqParams.page = 1;
+      goodsList.value = [];
+    };
+
     return {
       loading,
       finished,
       getData,
       goodsList,
       sortChange,
+      filterChange,
     };
   },
 };

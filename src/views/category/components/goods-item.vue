@@ -2,11 +2,11 @@
  * @Descripttion: 
  * @Author: JLX
  * @Date: 2022-08-02 10:49:02
- * @LastEditors: JLX
- * @LastEditTime: 2022-08-02 11:04:17
+ * @LastEditors: jiang-li-xiu 2663282851@qq.com
+ * @LastEditTime: 2022-08-07 14:56:09
 -->
 <template>
-  <RouterLink :to="`/prodect/${goods.id}`" class="goods-item">
+  <RouterLink :to="`/product/${goods.id}`" class="goods-item">
     <img :src="goods.picture" alt="" />
     <p class="name ellipsis">{{ goods.name }}</p>
     <p class="desc ellipsis">{{ goods.desc }}</p>

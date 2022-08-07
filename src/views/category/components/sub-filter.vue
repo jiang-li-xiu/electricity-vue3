@@ -2,8 +2,8 @@
  * @Descripttion: 筛选区
  * @Author: JLX
  * @Date: 2022-08-02 15:04:35
- * @LastEditors: JLX
- * @LastEditTime: 2022-08-04 17:57:39
+ * @LastEditors: jiang-li-xiu 2663282851@qq.com
+ * @LastEditTime: 2022-08-07 14:12:26
 -->
 <template>
   <div class="sub-filter" v-if="filterData && !filterLoading">
@@ -92,21 +92,37 @@ export default {
     // 获取筛选参数的函数
     const getFilterParams = () => {
       // 参考数据：{brandId:'',attrs:[{groupName:'',propertyName:''},...]}
+      const obj = { brandId: null, attrs: [] };
+      // 品牌
+      obj.brandId = filterData.value.selectedBrand;
+      // 销售属性
+      filterData.value.saleProperties.forEach((item) => {
+        if (item.selectedProp) {
+          const prop = item.properties.find(
+            (prop) => prop.id === item.selectedProp
+          );
+          obj.attrs.push({ groupName: item.name, propertyName: prop.name });
+        }
+      });
+      console.log(obj);
+      // 如果选择是空的 attrs传空
+      if (obj.attrs.length === 0) obj.attrs = null;
 
-      return;
+      return obj;
     };
 
     // 1. 记录当前选择的品牌
     const changeBrand = (brandId) => {
-      if (filterData.selectedBrand === brandId) return;
-      filterData.selectedBrand = brandId;
-      emit("filter-change", filterData.selectedBrand);
+      // 如果当前选中的ID就是已经选中ID
+      if (filterData.value.selectedBrand === brandId) return;
+      filterData.value.selectedBrand = brandId;
+      emit("filter-change", getFilterParams());
     };
     // 2. 记录已选择的销售属性
     const changeProp = (item, propId) => {
       if (item.selectedProp === propId) return;
       item.selectedProp = propId;
-      emit("prop-change");
+      emit("prop-change", getFilterParams());
     };
 
     return {
