@@ -1,8 +1,8 @@
 <!--
  * @Author: jiang-li-xiu 2663282851@qq.com
  * @Date: 2022-08-07 14:46:24
- * @LastEditors: jiang-li-xiu 2663282851@qq.com
- * @LastEditTime: 2022-08-07 16:20:52
+ * @LastEditors: JLX
+ * @LastEditTime: 2022-08-09 11:42:35
  * @FilePath: \electricity-vue3\src\views\goods\index.vue
  * @Description: 这是默认设置,请设置`customMade`, 打开koroFileHeader查看配置 进行设置: https://github.com/OBKoro1/koro1FileHeader/wiki/%E9%85%8D%E7%BD%AE
 -->
@@ -24,9 +24,17 @@
       <!-- 商品信息 -->
       <div class="goods-info">
         <div class="media">
+          <!-- 图片放大镜 -->
           <GoodsImage :images="goods.mainPictures" />
+          <!-- 商品详情基本信息 -->
+          <GoodsSales />
         </div>
-        <div class="spec"></div>
+        <div class="spec">
+          <!-- 商品名称 -->
+          <GoodsName :goods="goods" />
+          <!-- 商品规格 -->
+          <GoodsSku :goods="goods"/>
+        </div>
       </div>
       <!-- 商品推荐 -->
       <GoodsRelevant />
@@ -48,14 +56,21 @@
 <script>
 // 组件
 import GoodsRelevant from "./components/goods-relevant";
+// 放大镜
 import GoodsImage from "./components/goods-image";
+// 商品详情基本信息
+import GoodsSales from "./components/goods-sales";
+// 商品名称
+import GoodsName from "./components/goods-name";
+// 规格
+import GoodsSku from "./components/goods-sku.vue";
 // API
 import { findGoods } from "@/api/product";
 import { nextTick, ref, watch } from "vue";
 import { useRoute } from "vue-router";
 export default {
   name: "XtxGoodsPage",
-  components: { GoodsRelevant, GoodsImage },
+  components: { GoodsRelevant, GoodsImage, GoodsSales, GoodsName, GoodsSku },
   setup() {
     // 1. 获取商品详情，进行渲染
     const goods = useGoods();
@@ -95,7 +110,7 @@ const useGoods = () => {
 };
 </script>
 
-<style scoped lang='less'>
+<style scoped lang="less">
 .goods-info {
   min-height: 600px;
   background: #fff;

@@ -2,8 +2,8 @@
  * @Descripttion: 
  * @Author: JLX
  * @Date: 2022-07-25 11:02:31
- * @LastEditors: jiang-li-xiu 2663282851@qq.com
- * @LastEditTime: 2022-08-07 14:05:35
+ * @LastEditors: JLX
+ * @LastEditTime: 2022-08-08 09:11:53
 -->
 <template>
   <div class="sub-category">
@@ -94,27 +94,27 @@ export default {
       () => route.params.id,
       (newVal) => {
         // 在当前路径下
-        if (newVal && `/category/sub/${newVal}` === route.path) {
+        // if (newVal && `/category/sub/${newVal}` === route.path) {
           goodsList.value = [];
           reqParams = {
             page: 1,
             pageSize: 20,
           };
           finished.value = false;
-        }
+        // }
       }
     );
 
     // 1. 更改排序自己的筛选属性，重新请求
     // 来自sub-sort发射的事件 sortParams:点击的筛选条件
     const sortChange = (sortParams) => {
-      // finished.value = false;
+      finished.value = false;
       // console.log(sortParams);
       // 合并请求参数，保留之前参数
       reqParams = { ...reqParams, ...sortParams };
       reqParams.page = 1;
       goodsList.value = [];
-      finished.value = false;
+      // finished.value = false;
     };
 
     // 2. 更改筛选组件的筛选数据，重新请求

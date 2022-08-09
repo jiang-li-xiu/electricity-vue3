@@ -3,7 +3,7 @@
  * @Author: JLX
  * @Date: 2022-07-21 15:11:37
  * @LastEditors: JLX
- * @LastEditTime: 2022-07-22 17:40:29
+ * @LastEditTime: 2022-08-08 14:06:52
  */
 const { defineConfig } = require('@vue/cli-service')
 
@@ -24,5 +24,13 @@ module.exports = defineConfig({
                 path.join(__dirname, './src/assets/styles/mixins.less')
             ]
         }
-    }
+    },
+    // 配置10kb下的图片打包成base64的格式
+    // chainWebpack: config => {
+    //     config.module
+    //         .rule('images')
+    //         .use('url-loader')
+    //         .loader('url-loader')
+    //         .tap(options => Object.assign(options, { limit: 10000 }))
+    // }
 })
