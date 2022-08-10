@@ -3,7 +3,7 @@
  * @Author: JLX
  * @Date: 2022-08-09 11:13:00
  * @LastEditors: JLX
- * @LastEditTime: 2022-08-09 14:25:03
+ * @LastEditTime: 2022-08-10 17:47:19
 -->
 <template>
   <div class="goods-sku">
@@ -30,6 +30,43 @@
   </div>
 </template>
 <script>
+import powerSet from "@/vebder/power-set";
+const spliter = "★";
+// 得到一个路径字典对象
+const getPathMap = (skus) => {
+  // 1. 得到所有的sku集合  props.goods.skus中
+  // 2. 从所有的sku中筛选出有效的sku
+  // 3. 根据有效的sku使用power-set算法得到子集
+  // 4. 根据子集 往路径字典对象中存储 key-value
+  const pathMap = {};
+  skus.forEach((sku) => {
+    // inventory库存
+    if (sku.inventory > 0) {
+      // 计算当前有库存的sku子集
+      // 例如： [1,2,3] ==> [[1],[2],[3],[1,2],[1,3],[2,3],[1,3]]
+      // 拿到可选值数组
+      const valueArr = sku.specs.map((val) => val.valueName);
+      // console.log(valueArr);
+      // 可选值数组子集
+      const valArrPowerSet = powerSet(valueArr);
+      console.log(valArrPowerSet);
+      // 遍历子集，往pathMap插入数据
+      valArrPowerSet.forEach((arr) => {
+        // 根据arr得到字符串的key 约定key是：['蓝色','美国'] ===> '蓝色★美国'
+        const key = arr.join(spliter);
+        console.log(key);
+        // 往pathMap设置数据
+        if (pathMap[key]) {
+          // 已经有值
+          pathMap[key].push(sku.id);
+        } else {
+          pathMap[key] = [sku.id];
+        }
+      });
+    }
+  });
+  return pathMap;
+};
 export default {
   name: "GoodsSku",
   props: {
@@ -38,7 +75,10 @@ export default {
       default: () => ({}),
     },
   },
-  setup() {
+  setup(props) {
+    const getPath = getPathMap(props.goods.skus);
+    console.log(getPath);
+
     // 1. 选中与取消选中，约定在每一个按钮都拥有自己的选中状态数据：selected
     // 1.1 点击的是已选中，只需要取消发当前的选中
     // 1.2 点击的是未选中，把同一个规格的按钮都取消选中，再将当前点击的改为已选中
