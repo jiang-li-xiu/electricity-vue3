@@ -3,7 +3,7 @@
  * @Author: JLX
  * @Date: 2022-07-26 15:37:08
  * @LastEditors: JLX
- * @LastEditTime: 2022-07-26 16:56:24
+ * @LastEditTime: 2022-08-12 10:57:45
 -->
 <template>
   <div class="xtx-carousel" @mouseenter="stop()" @mouseleave="start()">
@@ -17,9 +17,23 @@
         v-for="(item, i) in sliders"
         :key="i"
       >
-        <RouterLink to="/">
+        <!-- 图片  -->
+        <RouterLink :to="item.hrefUrl" v-if="item.imgUrl">
           <img :src="item.imgUrl" alt="" />
         </RouterLink>
+
+        <!-- 商品列表（商品推荐/猜你喜欢） -->
+        <div v-else class="slider">
+          <RouterLink
+            v-for="goods in item"
+            :key="goods.id"
+            :to="`/product/${goods.id}`"
+          >
+            <img :src="goods.picture" alt="" />
+            <p class="name ellipsis">{{ goods.name }}</p>
+            <p class="price">&yen;{{ goods.price }}</p>
+          </RouterLink>
+        </div>
       </li>
     </ul>
     <!-- 上一张 -->
@@ -220,6 +234,32 @@ export default {
   &:hover {
     .carousel-btn {
       opacity: 1;
+    }
+  }
+}
+
+// 轮播商品的样式
+.slider {
+  display: flex;
+  justify-content: space-around;
+  padding: 0 40px;
+  > a {
+    width: 240px;
+    text-align: center;
+    img {
+      padding: 20px;
+      width: 230px !important;
+      height: 230px !important;
+    }
+    .name {
+      font-size: 16px;
+      color: #666;
+      padding: 0 40px;
+    }
+    .price {
+      font-size: 16px;
+      color: @priceColor;
+      margin-top: 15px;
     }
   }
 }

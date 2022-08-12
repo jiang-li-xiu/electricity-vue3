@@ -2,7 +2,7 @@
  * @Author: jiang-li-xiu 2663282851@qq.com
  * @Date: 2022-08-07 14:46:24
  * @LastEditors: JLX
- * @LastEditTime: 2022-08-09 11:42:35
+ * @LastEditTime: 2022-08-12 15:05:31
  * @FilePath: \electricity-vue3\src\views\goods\index.vue
  * @Description: 这是默认设置,请设置`customMade`, 打开koroFileHeader查看配置 进行设置: https://github.com/OBKoro1/koro1FileHeader/wiki/%E9%85%8D%E7%BD%AE
 -->
@@ -32,8 +32,14 @@
         <div class="spec">
           <!-- 商品名称 -->
           <GoodsName :goods="goods" />
-          <!-- 商品规格 -->
-          <GoodsSku :goods="goods"/>
+          <!-- 商品规格sku -->
+          <GoodsSku :goods="goods" skuId="" @change="changeSku" />
+          <!-- 数量组件 -->
+          <XtxNumbox v-model="num" :max="goods.inventory" />
+          <!-- 按钮 -->
+          <XtxButton type="primary" style="margin-top: 20px"
+            >加入购物车
+          </XtxButton>
         </div>
       </div>
       <!-- 商品推荐 -->
@@ -42,12 +48,20 @@
       <div class="goods-footer">
         <div class="goods-article">
           <!-- 商品+评价 -->
-          <div class="goods-tabs"></div>
+          <div class="goods-tabs">
+            <GoodsTabs />
+          </div>
           <!-- 注意事项 -->
-          <div class="goods-warn"></div>
+          <div class="goods-warn">
+            <GoodsWarn />
+          </div>
         </div>
-        <!-- 24热榜+专题推荐 -->
-        <div class="goods-aside"></div>
+        <!-- 24热榜+周榜推荐 -->
+        <div class="goods-aside">
+          <GoodsHot />
+          <GoodsHot :type="2" />
+          <GoodsHot :type="3" />
+        </div>
       </div>
     </div>
   </div>
@@ -64,18 +78,53 @@ import GoodsSales from "./components/goods-sales";
 import GoodsName from "./components/goods-name";
 // 规格
 import GoodsSku from "./components/goods-sku.vue";
+import XtxNumbox from "@/components/library/xtx-numbox.vue";
+import XtxButton from "@/components/library/xtx-button.vue";
+import GoodsTabs from "./components/goods-tabs.vue";
+import GoodsHot from "./components/goods-hot.vue";
+import GoodsWarn from "./components/goods-warn.vue";
 // API
 import { findGoods } from "@/api/product";
-import { nextTick, ref, watch } from "vue";
+import { nextTick, ref, watch, provide } from "vue";
 import { useRoute } from "vue-router";
 export default {
   name: "XtxGoodsPage",
-  components: { GoodsRelevant, GoodsImage, GoodsSales, GoodsName, GoodsSku },
+  components: {
+    GoodsRelevant,
+    GoodsImage,
+    GoodsSales,
+    GoodsName,
+    GoodsSku,
+    XtxNumbox,
+    XtxButton,
+    GoodsTabs,
+    GoodsHot,
+    GoodsWarn,
+  },
   setup() {
     // 1. 获取商品详情，进行渲染
     const goods = useGoods();
+
+    // 接收sku传过来的值
+    const changeSku = (sku) => {
+      // console.log(sku);
+      // 修改商品的现价原价库存信息
+      if (sku.skuId) {
+        goods.value.price = sku.price;
+        goods.value.oldPrice = sku.oldPrice;
+        goods.value.inventory = sku.inventory;
+      }
+    };
+
+    // 提供goods数据给后代组件使用
+    provide("goods", goods);
+
+    // 默认传的数量
+    const num = ref(1);
     return {
       goods,
+      changeSku,
+      num,
     };
   },
 };
@@ -137,10 +186,10 @@ const useGoods = () => {
     min-height: 1000px;
   }
 }
-.goods-tabs {
-  min-height: 600px;
-  background: #fff;
-}
+// .goods-tabs {
+//   min-height: 600px;
+//   background: #fff;
+// }
 .goods-warn {
   min-height: 600px;
   background: #fff;
