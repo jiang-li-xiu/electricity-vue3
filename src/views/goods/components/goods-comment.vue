@@ -2,8 +2,8 @@
  * @Descripttion: 评价组件
  * @Author: JLX
  * @Date: 2022-08-12 11:33:00
- * @LastEditors: JLX
- * @LastEditTime: 2022-08-12 16:40:23
+ * @LastEditors: jiang-li-xiu 2663282851@qq.com
+ * @LastEditTime: 2022-08-13 20:39:18
 -->
 <template>
   <div class="goods-comment" v-if="commentInfo">
@@ -33,71 +33,89 @@
         </div>
       </div>
     </div>
-    <div class="sort">
+    <div class="sort" v-if="commentInfo">
       <span>排序：</span>
       <a
         :class="{ active: reqParams.sortField === null }"
-        @click="reqParams.sortField == null"
+        @click="changeSort(null)"
         href="javascript:;"
         >默认
       </a>
       <a
         :class="{ active: reqParams.sortField === 'createTime' }"
-        @click="reqParams.sortField = 'createTime'"
+        @click="changeSort('createTime')"
         href="javascript:;"
         >最新
       </a>
       <a
         :class="{ active: reqParams.sortField === 'praiseCount' }"
-        @click="reqParams.sortField = 'praiseCount'"
+        @click="changeSort('praiseCount')"
         href="javascript:;"
         >最热
       </a>
     </div>
 
     <!-- 评价列表 -->
-    <div class="list">
-      <div class="item">
+    <div class="list" v-if="commentList">
+      <div class="item" v-for="item in commentList" :key="item.id">
         <div class="user">
           <!-- 头像 -->
-          <img
-            src="http://zhoushugang.gitee.io/erabbit-client-pc-static/uploads/avatar_1.png"
-            alt=""
-          />
+          <img :src="item.member.avatar" alt="" />
           <!-- 名称 -->
-          <span>兔****m</span>
+          <span>{{ formatNickname(item.member.nickname) }}</span>
         </div>
         <div class="body">
           <div class="score">
             <!-- 星星 -->
-            <i class="iconfont icon-pingjia"></i>
-            <i class="iconfont icon-pingjia"></i>
-            <i class="iconfont icon-pingjia"></i>
-            <i class="iconfont icon-pingjia"></i>
-            <i class="iconfont icon-wjx02"></i>
-            <span class="attr">颜色：黑色 尺码：M</span>
+            <i
+              v-for="i in item.score"
+              :key="i + 's'"
+              class="iconfont icon-pingjia"
+            ></i>
+            <i
+              v-for="i in 5 - item.score"
+              :key="i + 'k'"
+              class="iconfont icon-wjx02"
+            ></i>
+            <span class="attr">{{ formatSpecs(item.orderInfo.specs) }}</span>
           </div>
-          <div class="text">
-            网易云app上这款耳机非常不错 新人下载网易云购买这款耳机优惠大
-            而且耳机🎧确实正品 音质特别好 戴上这款耳机
-            听音乐看电影效果声音真是太棒了 无线方便 小盒自动充电
-            最主要是质量好音质棒 想要买耳机的放心拍 音效巴巴滴 老棒了
-          </div>
+          <div class="text">{{ item.content }}</div>
+
+          <!-- 评论图片组件 -->
+          <GoodsCommentImage
+            v-if="item.pictures.length"
+            :pictures="item.pictures"
+          ></GoodsCommentImage>
+
           <div class="time">
-            <span>2020-10-10 10:11:22</span>
-            <span class="zan"><i class="iconfont icon-dianzan"></i>100</span>
+            <span>{{ item.createTime }}</span>
+            <span class="zan"
+              ><i class="iconfont icon-dianzan"></i>{{ item.praiseCount }}
+            </span>
           </div>
         </div>
       </div>
     </div>
+    <!-- 分页组件 -->
+    <XtxPagination
+      v-if="toal"
+      :total="total"
+      :page-size="reqParams.pageSize"
+      :current-page="reqParams.page"
+      @current-page="changePager"
+    />
   </div>
 </template>
 <script>
 // API
-import { findGoodsCommentInfo } from "@/api/product";
-import { inject, reactive, ref } from "vue";
+import { findGoodsCommentInfo, findGoodsCommentList } from "@/api/product";
+// 组件
+import GoodsCommentImage from "./goods-comment-image.vue";
+import { inject, reactive, ref, watch } from "vue";
+import XtxPagination from "@/components/library/xtx-pagination.vue";
 export default {
   name: "GoodsComment",
+  components: { GoodsCommentImage, XtxPagination },
   setup() {
     // 获取评价信息
     const commentInfo = ref(null);
@@ -116,7 +134,7 @@ export default {
       });
       // 设置数据之前 tags数组前追加 有图tag 全部评价tag 数据
       commentInfo.value = data.result;
-      console.log(commentInfo);
+      // console.log(commentInfo);
     });
 
     // 激活tag 默认激活全部
@@ -146,6 +164,13 @@ export default {
       }
     };
 
+    // 点击排序
+    const changeSort = (sortField) => {
+      reqParams.sortField = sortField;
+      // 页码重置到1
+      reqParams.page = 1;
+    };
+
     // 准备筛选条件数据
     const reqParams = reactive({
       page: 1,
@@ -155,7 +180,41 @@ export default {
       sortField: null, //排序方式：praiseCount热度  createTime最新
     });
 
-    console.log(reqParams);
+    // console.log(reqParams);
+    // 初始化需要发请求，筛选条件发生改变发请求
+    const commentList = ref([]);
+    // 总数量
+    const total = ref(0);
+    watch(
+      reqParams,
+      () => {
+        // console.log('111')
+        // 发请求
+        findGoodsCommentList(goods.value.id, reqParams).then((data) => {
+          commentList.value = data.result.items;
+          total.value = data.result.counts;
+          // console.log(commentList);
+        });
+      },
+      { immediate: true }
+    );
+
+    // 定义转换数据的函数 （对应vue2的过滤器）
+    const formatSpecs = (specs) => {
+      return specs
+        .reduce((p, c) => `${p} ${c.name}：${c.nameValue}`, "")
+        .trim();
+    };
+
+    // 定义格式化名称的方法
+    const formatNickname = (nickname) => {
+      return nickname.substr(0, 1) + "****" + nickname.substr(-1);
+    };
+
+    // 实现改变分页的方法
+    const changePager = (newPage) => {
+      reqParams.page = newPage;
+    };
 
     return {
       goods,
@@ -163,6 +222,12 @@ export default {
       currentTagIndex,
       changeTag,
       reqParams,
+      commentList,
+      changeSort,
+      formatSpecs,
+      formatNickname,
+      total,
+      changePager,
     };
   },
 };

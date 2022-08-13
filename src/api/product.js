@@ -1,8 +1,8 @@
 /*
  * @Author: jiang-li-xiu 2663282851@qq.com
  * @Date: 2022-08-07 15:00:23
- * @LastEditors: JLX
- * @LastEditTime: 2022-08-12 15:16:38
+ * @LastEditors: jiang-li-xiu 2663282851@qq.com
+ * @LastEditTime: 2022-08-13 13:02:30
  * @FilePath: \electricity-vue3\src\api\product.js
  * @Description: 这是默认设置,请设置`customMade`, 打开koroFileHeader查看配置 进行设置: https://github.com/OBKoro1/koro1FileHeader/wiki/%E9%85%8D%E7%BD%AE
  */
@@ -43,6 +43,18 @@ export const findGoodsHot = ({ id, limit = 3, type = 1 }) => {
  */
 export const findGoodsCommentInfo = (id) => {
     return request(`/goods/${id}/evaluate`, 'get')
+
+    // axios 遇见http https 开头的地址，不会加上基准地址
+    // return request(`https://mock.boxuegu.com/mock/1175/goods/${id}/evaluate`, 'get')
+}
+
+/**
+ * 查询商品评价列表
+ * @param {String} id -商品id
+ * @param {Object} id -商品筛选条件
+ */
+export const findGoodsCommentList = (id,params) => {
+    return request(`/goods/${id}/evaluate/page`, 'get',params)
 
     // axios 遇见http https 开头的地址，不会加上基准地址
     // return request(`https://mock.boxuegu.com/mock/1175/goods/${id}/evaluate`, 'get')
