@@ -2,8 +2,8 @@
  * @Descripttion: 
  * @Author: JLX
  * @Date: 2022-07-21 17:05:31
- * @LastEditors: JLX
- * @LastEditTime: 2022-07-22 11:53:12
+ * @LastEditors: jiang-li-xiu 2663282851@qq.com
+ * @LastEditTime: 2022-08-13 21:00:47
  */
 // 用户模块
 
@@ -18,7 +18,8 @@ export default {
                 nickname: '',
                 account: '',
                 mobile: '',
-                token: '1',
+                // token: '1',
+                token: '',
             }
         }
     },

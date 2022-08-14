@@ -3,7 +3,7 @@
  * @Author: JLX
  * @Date: 2022-08-12 11:33:00
  * @LastEditors: jiang-li-xiu 2663282851@qq.com
- * @LastEditTime: 2022-08-13 20:39:18
+ * @LastEditTime: 2022-08-13 20:48:56
 -->
 <template>
   <div class="goods-comment" v-if="commentInfo">
@@ -98,7 +98,7 @@
     </div>
     <!-- 分页组件 -->
     <XtxPagination
-      v-if="toal"
+      v-if="total"
       :total="total"
       :page-size="reqParams.pageSize"
       :current-page="reqParams.page"

@@ -2,8 +2,8 @@
  * @Descripttion: 
  * @Author: JLX
  * @Date: 2022-07-22 17:50:21
- * @LastEditors: JLX
- * @LastEditTime: 2022-07-22 18:03:30
+ * @LastEditors: jiang-li-xiu 2663282851@qq.com
+ * @LastEditTime: 2022-08-13 20:55:46
 -->
 <template>
   <nav class="app-topnav">
@@ -21,7 +21,7 @@
 
         <!-- 否则先登录 -->
         <template v-else>
-          <li><a href="javascript:;">请先登录</a></li>
+          <li><RouterLink to="/login">请先登录</RouterLink></li>
           <li><a href="javascript:;">免费注册</a></li>
         </template>
         <li><a href="javascript:;">我的订单</a></li>

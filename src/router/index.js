@@ -3,7 +3,7 @@
  * @Author: JLX
  * @Date: 2022-07-21 15:11:37
  * @LastEditors: jiang-li-xiu 2663282851@qq.com
- * @LastEditTime: 2022-08-07 14:54:32
+ * @LastEditTime: 2022-08-13 20:53:56
  */
 import { createRouter, createWebHashHistory } from 'vue-router'
 
@@ -17,6 +17,8 @@ const subCategoory = () =>
     import('@/views/category/sub.vue')
 const Goods = () =>
     import('@/views/goods')
+const Login = () =>
+    import('@/views/login/index.vue')
 
 // vue2.0 new VueRouter({}) 创建路由实例
 // vue3.0 createRouter({})
@@ -32,6 +34,10 @@ const routes = [
             { path: '/category/sub/:id', component: subCategoory },
             { path: '/product/:id', component: Goods },
         ]
+    },
+    {
+        path: '/login',
+        component: Login
     }
 ]
 
