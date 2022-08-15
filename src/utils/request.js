@@ -3,7 +3,7 @@
  * @Author: JLX
  * @Date: 2022-07-22 09:16:03
  * @LastEditors: JLX
- * @LastEditTime: 2022-07-22 14:08:21
+ * @LastEditTime: 2022-08-15 15:41:45
  */
 // 1.创建一个新的axios实例
 // 2.请求拦截器，如果有token进行头部携带
@@ -30,7 +30,7 @@ instance.interceptors.request.use(config => {
     // 1、获取用户信息对象
     const { profile } = store.state.user
         // 2、判断是否有token
-    localStorage.setItem('profile.token', 2)
+        // localStorage.setItem('profile.token', 2)
     console.log(profile.token);
     if (profile.token) {
         config.headers.Authorization = `Bearer${profile.token}`

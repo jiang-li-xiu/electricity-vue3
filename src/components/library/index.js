@@ -3,7 +3,7 @@
  * @Author: JLX
  * @Date: 2022-07-26 15:04:19
  * @LastEditors: JLX
- * @LastEditTime: 2022-07-28 17:12:17
+ * @LastEditTime: 2022-08-15 14:42:45
  */
 // 插件：扩展vue原有的功能：全局组件，自定义指令，挂载原型方法，vue3没有全局过滤器
 
@@ -15,6 +15,9 @@
  */
 // 默认图片
 import defaultImg from '@/assets/images/src.jpg'
+
+// 
+import Message from './Message';
 
 //            -----1.传统方法start-------
 // // 骨架组件
@@ -69,6 +72,9 @@ export default {
 
         // 定义指令(扩展)
         defineDirective(app)
+
+        // 定义一个原型函数
+        app.config.globalProperties.$message = Message
     }
 }
 

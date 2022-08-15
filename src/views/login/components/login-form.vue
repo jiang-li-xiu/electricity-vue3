@@ -1,8 +1,8 @@
 <!--
  * @Author: jiang-li-xiu 2663282851@qq.com
  * @Date: 2022-08-14 14:11:33
- * @LastEditors: jiang-li-xiu 2663282851@qq.com
- * @LastEditTime: 2022-08-14 17:29:02
+ * @LastEditors: JLX
+ * @LastEditTime: 2022-08-15 17:45:15
  * @FilePath: \electricity-vue3\src\views\login\components\login-form.vue
  * @Description: 登录表单
 -->
@@ -85,7 +85,9 @@
               type="password"
               placeholder="请输入验证码"
             />
-            <span class="code">发送验证码</span>
+            <span @click="send()" class="code">
+              {{ time === 0 ? "发送验证码" : `${time}秒后发送` }}
+            </span>
           </div>
           <!-- 显示错误信息 -->
           <div class="error" v-if="errors.code">
@@ -120,16 +122,27 @@
       </div>
     </div>
     <!-- 测试 -->
-    <XtxMessage type="success" :text="不存在"></XtxMessage>
+    <!-- <XtxMessage type="success" text="不存在"></XtxMessage> -->
   </div>
 </template>
 <script>
-import { reactive, ref, watch } from "vue";
+// API
+import {
+  userAccountLogin,
+  userMobileLoginMsg,
+  userMobileLogin,
+} from "@/api/user";
+import { onUnmounted, reactive, ref, watch } from "vue";
 // 导入校验插件
 import { Form, Field } from "vee-validate";
 // 封装的校验组件
 import schema from "@/utils/vee-validate-schema";
+// 组件
 import XtxMessage from "@/components/library/xtx-message.vue";
+import Message from "@/components/library/Message";
+import { useStore } from "vuex";
+import { useRoute, useRouter } from "vue-router";
+import { useIntervalFn } from "@vueuse/core";
 export default {
   name: "LoginForm",
   components: {
@@ -137,6 +150,10 @@ export default {
     Field,
     XtxMessage,
   },
+  // vue2
+  // created(){
+  //   this.$message({type:'error',text:'用户名已存在'})
+  // },
   setup() {
     // 切换登录 默认不是短信登录
     const isMsgLogin = ref(false);
@@ -180,10 +197,141 @@ export default {
     });
 
     // 需要在点击登录的时候对整体表单进行校验
+    const store = useStore();
+    const router = useRouter(); //路由方法
+    const route = useRoute(); //拿路由信息
+
     const login = async () => {
       // Form组件提供了一个validate 函数作为整体表单校验，返回的是Promise
       // true 通过
       const valid = await formCom.value.validate();
+      // Message({ type: "error", text: "用户名或密码错误" });
+      if (valid) {
+        // ***短信登录*** 13241051259/123456
+        // 1. 发送验证码
+        // 1.1 绑定发送验证码按钮点击事件
+        // 1.2 校验手机号,如果成功才发送短信(定义API), 请求成功后开启60s倒计时, 倒计时过程不能再点击,倒计时过后恢复原样
+        // 1.3 校验失败,失败的校验样式显示
+        // 2. 进行手机号登录
+        // 2.1. 准备一个API做手机号登录
+        // 2.2. 调用API
+        // 2.3. 成功，存储用户信息+跳转到来源页或者首页　＋　消息提示
+        // 2.4. 失败：消息提示
+        try {
+          let data = null;
+          if (isMsgLogin.value) {
+            const { mobile, code } = form;
+            data = await userMobileLogin({ mobile, code });
+          }
+          // ***账号登录***
+          // 1. 准备一个API做账号登录
+          // 2. 调用API
+          // 3.　成功，存储用户信息+跳转到来源页或者首页　＋　消息提示
+          // 4.　失败：消息提示
+          else {
+            const { account, password } = form;
+            data = await userAccountLogin({ account, password });
+            //   // 发起请求
+            //   userAccountLogin({ account, password })
+            //     .then((data) => {
+            //       // 把这些数据给vuex 存储
+            //       const { id, account, avatar, mobile, nickname, token } =
+            //         data.result;
+            //       store.commit("/user/setUser", {
+            //         id,
+            //         account,
+            //         avatar,
+            //         mobile,
+            //         nickname,
+            //         token,
+            //       });
+            //       // 进行跳转 跳转到之前的Url或首页
+            //       router.push(route.query.redirectUrl || "/");
+            //       // 成功消息提示
+            //       Message({ type: "success", text: "登录成功" });
+            //     })
+            //     .catch((e) => {
+            //       // 失败提示
+            //       if (e.response.data) {
+            //         Message({
+            //           type: "error",
+            //           text: e.response.data.message || "登录失败",
+            //         });
+            //       }
+            //     });
+          }
+          // 把这些数据给vuex 存储
+          const { id, account, avatar, mobile, nickname, token } = data.result;
+          store.commit("user/setUser", {
+            id,
+            account,
+            avatar,
+            mobile,
+            nickname,
+            token,
+          });
+          // localStorage.setItem(
+          //   "user",
+          //   JSON.stringify({
+          //     id,
+          //     account,
+          //     avatar,
+          //     mobile,
+          //     nickname,
+          //     token,
+          //   })
+          // );
+          // 进行跳转 跳转到之前的Url或首页
+          router.push(route.query.redirectUrl || "/");
+          // 成功消息提示
+          Message({ type: "success", text: "登录成功" });
+        } catch (e) {
+          // 失败提示
+          if (e.response.data) {
+            Message({
+              type: "error",
+              text: e.response.data.message || "登录失败",
+            });
+          }
+        }
+      }
+    };
+
+    // 倒计时 pause:暂停 resume:开启
+    // useIntervalFn(回调函数, 执行间隔, false:不立即开启)
+    const time = ref(0);
+    const { pause, resume } = useIntervalFn(
+      () => {
+        time.value--;
+        if (time.value <= 0) {
+          pause();
+        }
+      },
+      1000,
+      false
+    );
+    // 组件销毁 清除定时器
+    onUnmounted(() => {
+      pause();
+    });
+    // 发送验证码事件
+    const send = async () => {
+      // 校验当前手机号
+      const valid = mySchema.mobile(form.mobile);
+      if (valid === true) {
+        // 通过
+        // 没有倒计时才可以发送请求
+        if (time.value === 0) {
+          await userMobileLoginMsg({ mobile: form.mobile });
+          Message({ type: "success", text: "发送成功" });
+          // 开启短信倒计时
+          time.value = 60;
+          resume();
+        }
+      } else {
+        // 失败, 使用vee的错误函数显示信息 setFieldError(字段名,错误信息)
+        formCom.value.setFieldError("mobile", valid);
+      }
     };
 
     return {
@@ -192,6 +340,8 @@ export default {
       schema: mySchema,
       formCom,
       login,
+      send,
+      time,
     };
   },
 };

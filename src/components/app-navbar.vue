@@ -2,8 +2,8 @@
  * @Descripttion: 
  * @Author: JLX
  * @Date: 2022-07-22 17:50:21
- * @LastEditors: jiang-li-xiu 2663282851@qq.com
- * @LastEditTime: 2022-08-13 20:55:46
+ * @LastEditors: JLX
+ * @LastEditTime: 2022-08-15 17:51:05
 -->
 <template>
   <nav class="app-topnav">
@@ -16,7 +16,7 @@
               ><i class="iconfont icon-user"></i>{{ profile.account }}</a
             >
           </li>
-          <li><a href="javascript:;">退出登录</a></li>
+          <li><a @click="logout" href="javascript:;">退出登录</a></li>
         </template>
 
         <!-- 否则先登录 -->
@@ -38,6 +38,7 @@
 <script>
 import { computed } from "@vue/runtime-core";
 import { useStore } from "vuex";
+import { useRouter } from 'vue-router';
 export default {
   name: "AppTopnav",
   setup() {
@@ -48,8 +49,21 @@ export default {
     const profile = computed(() => {
       return store.state.user.profile;
     });
+
+    /**
+     *退出登录
+     *1. 清空本地存储信息和vuex的用户信息
+     *2. 跳转登录
+     */
+    const router = useRouter()
+    const logout = () => {
+      store.commit("user/setUser", {});
+      router.push('/login')
+    };
+
     return {
       profile,
+      logout,
     };
   },
 };

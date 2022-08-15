@@ -1,8 +1,8 @@
 <!--
  * @Author: jiang-li-xiu 2663282851@qq.com
  * @Date: 2022-08-14 17:07:28
- * @LastEditors: jiang-li-xiu 2663282851@qq.com
- * @LastEditTime: 2022-08-14 17:28:05
+ * @LastEditors: JLX
+ * @LastEditTime: 2022-08-15 14:16:08
  * @FilePath: \electricity-vue3\src\components\library\xtx-message.vue
  * @Description: 消息组件
 -->
@@ -56,7 +56,7 @@ export default {
 
     // 控制元素显示隐藏
     const visible = ref(false);
-    // 渲染完毕显示
+    // 组件渲染完毕显示
     onMounted(() => {
       visible.value = true;
     });
@@ -88,6 +88,7 @@ export default {
     vertical-align: middle;
   }
 }
+// 动画
 .down {
   &-enter {
     &-from {
