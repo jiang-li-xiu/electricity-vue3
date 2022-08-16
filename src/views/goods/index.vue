@@ -2,7 +2,7 @@
  * @Author: jiang-li-xiu 2663282851@qq.com
  * @Date: 2022-08-07 14:46:24
  * @LastEditors: JLX
- * @LastEditTime: 2022-08-12 15:05:31
+ * @LastEditTime: 2022-08-16 17:43:51
  * @FilePath: \electricity-vue3\src\views\goods\index.vue
  * @Description: 这是默认设置,请设置`customMade`, 打开koroFileHeader查看配置 进行设置: https://github.com/OBKoro1/koro1FileHeader/wiki/%E9%85%8D%E7%BD%AE
 -->
@@ -37,7 +37,10 @@
           <!-- 数量组件 -->
           <XtxNumbox v-model="num" :max="goods.inventory" />
           <!-- 按钮 -->
-          <XtxButton type="primary" style="margin-top: 20px"
+          <XtxButton
+            @click="insertCart()"
+            type="primary"
+            style="margin-top: 20px"
             >加入购物车
           </XtxButton>
         </div>
@@ -87,6 +90,8 @@ import GoodsWarn from "./components/goods-warn.vue";
 import { findGoods } from "@/api/product";
 import { nextTick, ref, watch, provide } from "vue";
 import { useRoute } from "vue-router";
+import { useStore } from "vuex";
+import Message from "@/components/library/Message";
 export default {
   name: "XtxGoodsPage",
   components: {
@@ -114,10 +119,43 @@ export default {
         goods.value.oldPrice = sku.oldPrice;
         goods.value.inventory = sku.inventory;
       }
+      // 记录选择后的sku 可能有数据 可能没数据{}
+      currSku.value = sku;
     };
 
     // 提供goods数据给后代组件使用
     provide("goods", goods);
+
+    // 加入购物车（要存到vuex）
+    const store = useStore();
+    const currSku = ref(null);
+    const insertCart = () => {
+      // TODO 判断规格是否完整 完整才能加到购物车
+      if (currSku.value && currSku.value.skuId) {
+        //调用actions name attrsText picture price nowPrice selected stock count isEffective
+        const { skuId, specsText: attrsText, inventory: stock } = currSku.value
+        const { id, name, price, mianPictures } = goods.value
+        store
+          .dispatch("cart/insertCart", {
+            id,
+            skuId,
+            attrsText,
+            stock,
+            name,
+            price,
+            picture: mianPictures,
+            nowPrice: price,
+            selected: true,
+            isEffective: true,
+            count: num.value,
+          })
+          .then(() => {
+            Message({ type: "success", text: "添加购物车成功" });
+          });
+      } else {
+        Message({ text: "请选择完整的规格" });
+      }
+    };
 
     // 默认传的数量
     const num = ref(1);
@@ -125,6 +163,7 @@ export default {
       goods,
       changeSku,
       num,
+      insertCart,
     };
   },
 };

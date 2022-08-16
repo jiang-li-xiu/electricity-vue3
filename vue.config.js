@@ -3,7 +3,7 @@
  * @Author: JLX
  * @Date: 2022-07-21 15:11:37
  * @LastEditors: JLX
- * @LastEditTime: 2022-08-08 14:06:52
+ * @LastEditTime: 2022-08-16 09:33:10
  */
 const { defineConfig } = require('@vue/cli-service')
 
@@ -25,12 +25,23 @@ module.exports = defineConfig({
             ]
         }
     },
-    // 配置10kb下的图片打包成base64的格式
-    // chainWebpack: config => {
-    //     config.module
-    //         .rule('images')
-    //         .use('url-loader')
-    //         .loader('url-loader')
-    //         .tap(options => Object.assign(options, { limit: 10000 }))
-    // }
+
+    chainWebpack: config => {
+        // 配置10kb下的图片打包成base64的格式
+        // config.module
+        //     .rule('images')
+        //     .use('url-loader')
+        //     .loader('url-loader')
+        //     .tap(options => Object.assign(options, { limit: 10000 }))
+
+        // 需要开启IP或域名访问webpack服务器权限，在vue.config.js中
+        // 这个是给webpack-dev-server开启可IP和域名访问权限。
+        // config.devServer.disableHostCheck(true)
+    },
+    configureWebpack: {
+        devServer: {
+            // disableHostCheck: true,
+            allowedHosts: ['www.corho.com'] // 此处是要改变的域名
+        }
+    }
 })

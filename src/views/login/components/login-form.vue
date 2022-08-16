@@ -2,7 +2,7 @@
  * @Author: jiang-li-xiu 2663282851@qq.com
  * @Date: 2022-08-14 14:11:33
  * @LastEditors: JLX
- * @LastEditTime: 2022-08-15 17:45:15
+ * @LastEditTime: 2022-08-16 16:32:21
  * @FilePath: \electricity-vue3\src\views\login\components\login-form.vue
  * @Description: 登录表单
 -->
@@ -333,6 +333,13 @@ export default {
         formCom.value.setFieldError("mobile", valid);
       }
     };
+
+    /**
+     * 初始化qq登录按钮
+     * 1. 准备span有id
+     * 2. 通过 QC.login({btnId:'qqLoginBtn'})
+     */
+    
 
     return {
       isMsgLogin,

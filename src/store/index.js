@@ -3,7 +3,7 @@
  * @Author: JLX
  * @Date: 2022-07-21 15:11:37
  * @LastEditors: JLX
- * @LastEditTime: 2022-07-22 09:14:46
+ * @LastEditTime: 2022-08-16 08:39:12
  */
 import { createStore } from 'vuex'
 
@@ -11,6 +11,7 @@ import cart from './modules/cart'
 import category from './modules/category'
 import user from './modules/user'
 
+import createPersistedState from "vuex-persistedstate"
 
 /**
  * vuex持久化 
@@ -23,7 +24,18 @@ export default createStore({
         cart,
         category,
         user,
-    }
+    },
+
+    // 配置插件
+    plugins: [
+        // 默认储存在localstorage
+        createPersistedState({
+            // 本地储存名
+            key: 'ceshivuex',
+            // 指定模块
+            paths: ['user', 'cart', 'category']
+        })
+    ],
 })
 
 // 2.0 new Vuex.Store({})
