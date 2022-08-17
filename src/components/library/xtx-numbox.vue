@@ -3,7 +3,7 @@
  * @Author: JLX
  * @Date: 2022-08-12 09:11:40
  * @LastEditors: JLX
- * @LastEditTime: 2022-08-12 10:09:24
+ * @LastEditTime: 2022-08-17 16:40:35
 -->
 <template>
   <div class="xtx-numbox">
@@ -26,7 +26,7 @@ export default {
     },
     label: {
       type: String,
-      default: "数量",
+      default: "",
     },
     // 最小值，最大值
     min: {

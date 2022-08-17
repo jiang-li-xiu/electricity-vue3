@@ -2,23 +2,25 @@
  * @Descripttion: 
  * @Author: JLX
  * @Date: 2022-07-21 15:11:37
- * @LastEditors: jiang-li-xiu 2663282851@qq.com
- * @LastEditTime: 2022-08-13 20:53:56
+ * @LastEditors: JLX
+ * @LastEditTime: 2022-08-17 15:33:51
  */
 import { createRouter, createWebHashHistory } from 'vue-router'
 
 const Layout = () =>
-    import('@/views/Layout')
+    import ('@/views/Layout')
 const Home = () =>
-    import('@/views/home')
+    import ('@/views/home')
 const topCategory = () =>
-    import('@/views/category/index.vue')
+    import ('@/views/category/index.vue')
 const subCategoory = () =>
-    import('@/views/category/sub.vue')
+    import ('@/views/category/sub.vue')
 const Goods = () =>
-    import('@/views/goods')
+    import ('@/views/goods')
 const Login = () =>
-    import('@/views/login/index.vue')
+    import ('@/views/login/index.vue')
+const Cart = () =>
+    import ('@/views/cart/index.vue')
 
 // vue2.0 new VueRouter({}) 创建路由实例
 // vue3.0 createRouter({})
@@ -33,6 +35,7 @@ const routes = [
             { path: '/category/:id', component: topCategory },
             { path: '/category/sub/:id', component: subCategoory },
             { path: '/product/:id', component: Goods },
+            { path: '/cart', component: Cart },
         ]
     },
     {

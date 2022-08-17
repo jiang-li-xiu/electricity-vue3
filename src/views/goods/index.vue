@@ -2,7 +2,7 @@
  * @Author: jiang-li-xiu 2663282851@qq.com
  * @Date: 2022-08-07 14:46:24
  * @LastEditors: JLX
- * @LastEditTime: 2022-08-16 17:43:51
+ * @LastEditTime: 2022-08-17 16:40:45
  * @FilePath: \electricity-vue3\src\views\goods\index.vue
  * @Description: 这是默认设置,请设置`customMade`, 打开koroFileHeader查看配置 进行设置: https://github.com/OBKoro1/koro1FileHeader/wiki/%E9%85%8D%E7%BD%AE
 -->
@@ -35,7 +35,7 @@
           <!-- 商品规格sku -->
           <GoodsSku :goods="goods" skuId="" @change="changeSku" />
           <!-- 数量组件 -->
-          <XtxNumbox v-model="num" :max="goods.inventory" />
+          <XtxNumbox v-model="num" :max="goods.inventory" label="数量" />
           <!-- 按钮 -->
           <XtxButton
             @click="insertCart()"
@@ -119,22 +119,22 @@ export default {
         goods.value.oldPrice = sku.oldPrice;
         goods.value.inventory = sku.inventory;
       }
-      // 记录选择后的sku 可能有数据 可能没数据{}
+      // **记录选择后的sku 可能有数据 可能没数据{}
       currSku.value = sku;
     };
 
     // 提供goods数据给后代组件使用
     provide("goods", goods);
 
-    // 加入购物车（要存到vuex）
+    // TODO 加入购物车（要存到vuex）
     const store = useStore();
     const currSku = ref(null);
     const insertCart = () => {
-      // TODO 判断规格是否完整 完整才能加到购物车
+      // ** 判断规格是否完整 完整才能加到购物车
       if (currSku.value && currSku.value.skuId) {
         //调用actions name attrsText picture price nowPrice selected stock count isEffective
-        const { skuId, specsText: attrsText, inventory: stock } = currSku.value
-        const { id, name, price, mianPictures } = goods.value
+        const { skuId, specsText: attrsText, inventory: stock } = currSku.value;
+        const { id, name, price, mainPictures } = goods.value;
         store
           .dispatch("cart/insertCart", {
             id,
@@ -143,7 +143,7 @@ export default {
             stock,
             name,
             price,
-            picture: mianPictures,
+            picture: mainPictures[0],
             nowPrice: price,
             selected: true,
             isEffective: true,

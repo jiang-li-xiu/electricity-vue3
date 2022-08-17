@@ -3,7 +3,7 @@
  * @Author: JLX
  * @Date: 2022-08-09 11:13:00
  * @LastEditors: JLX
- * @LastEditTime: 2022-08-12 10:20:31
+ * @LastEditTime: 2022-08-17 08:38:06
 -->
 <template>
   <div class="goods-sku">
@@ -32,7 +32,7 @@
 <script>
 import powerSet from "@/vebder/power-set";
 const spliter = "★";
-// 得到一个路径字典对象
+// **得到一个路径字典对象
 const getPathMap = (skus) => {
   // 1. 得到所有的sku集合  props.goods.skus中
   // 2. 从所有的sku中筛选出有效的sku
@@ -68,7 +68,7 @@ const getPathMap = (skus) => {
   return pathMap;
 };
 
-// 记录选中的按钮对象
+// **记录选中的按钮对象
 const getSelectedValues = (specs) => {
   const arr = [];
   specs.forEach((item) => {

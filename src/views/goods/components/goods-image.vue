@@ -2,7 +2,7 @@
  * @Author: jiang-li-xiu 2663282851@qq.com
  * @Date: 2022-08-07 14:46:24
  * @LastEditors: JLX
- * @LastEditTime: 2022-08-08 09:51:47
+ * @LastEditTime: 2022-08-17 08:37:23
  * @FilePath: \electricity-vue3\src\views\goods\index.vue
  * @Description: 放大镜
 -->
@@ -59,11 +59,11 @@ export default {
       backgroundPositionX: 0,
       backgroundPositionY: 0,
     });
-    // 4. 使用useMouseInElement得到基于元素左上角的坐标和是否离开元素数据
+    //TODO 4. 使用useMouseInElement得到基于元素左上角的坐标和是否离开元素数据
     // target监听的元素 isOutside是否显示
     const target = ref(null);
     const { elementX, elementY, isOutside } = useMouseInElement(target);
-    // 监听坐标的变化
+    // **监听坐标的变化
     watch([elementX, elementY, isOutside], () => {
       // console.log(elementX.value, elementY.value, isOutside.value);
       // 5. 根据数据设置样式和是否显示数据

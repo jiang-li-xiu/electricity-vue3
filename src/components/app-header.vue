@@ -10,19 +10,23 @@
         <span class="iconfont icon-sousuo"></span>
         <input type="text" placeholder="搜一搜" />
       </div>
-      <div class="cart">
+
+      <!-- 使用头部购物车组件 -->
+      <AppHeaderCart></AppHeaderCart>
+      <!-- <div class="cart">
         <a class="curr" href="#">
           <span class="iconfont icon-31gouwuche"></span><em>2</em>
         </a>
-      </div>
+      </div> -->
     </div>
   </header>
 </template>
 
 <script>
 import appHeaderNav from "./app-header-nav";
+import AppHeaderCart from "./app-header-cart";
 export default {
-  components: { appHeaderNav },
+  components: { appHeaderNav, AppHeaderCart },
   name: "AppHeader",
 };
 </script>
@@ -83,31 +87,31 @@ export default {
       color: #666;
     }
   }
-  .cart {
-    width: 50px;
-    .curr {
-      height: 32px;
-      line-height: 32px;
-      text-align: center;
-      position: relative;
-      display: block;
-      .icon-cart {
-        font-size: 22px;
-      }
-      em {
-        font-style: normal;
-        position: absolute;
-        right: 0;
-        top: 0;
-        padding: 1px 6px;
-        line-height: 1;
-        background: @helpColor;
-        color: #fff;
-        font-size: 12px;
-        border-radius: 10px;
-        font-family: Arial;
-      }
-    }
-  }
+  // .cart {
+  //   width: 50px;
+  //   .curr {
+  //     height: 32px;
+  //     line-height: 32px;
+  //     text-align: center;
+  //     position: relative;
+  //     display: block;
+  //     .icon-cart {
+  //       font-size: 22px;
+  //     }
+  //     em {
+  //       font-style: normal;
+  //       position: absolute;
+  //       right: 0;
+  //       top: 0;
+  //       padding: 1px 6px;
+  //       line-height: 1;
+  //       background: @helpColor;
+  //       color: #fff;
+  //       font-size: 12px;
+  //       border-radius: 10px;
+  //       font-family: Arial;
+  //     }
+  //   }
+  // }
 }
 </style>
