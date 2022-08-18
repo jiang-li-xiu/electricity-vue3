@@ -3,7 +3,7 @@
  * @Author: JLX
  * @Date: 2022-07-21 17:05:39
  * @LastEditors: JLX
- * @LastEditTime: 2022-08-18 09:17:24
+ * @LastEditTime: 2022-08-18 17:11:22
  */
 
 import { getNewCartGoods } from "@/api/cart"
@@ -143,6 +143,21 @@ export default {
                     // 未登录
                     ctx.getters.validList.forEach(goods => {
                         ctx.commit('updateCart', { skuId: goods.skuId, selected })
+                    })
+                    resolve()
+                }
+            })
+        },
+        // ** 批量删除 isClear为真 删除是失效的商品
+        batchDeleteCart(ctx, isClear) {
+            return new Promise((resolve, reject) => {
+                if (ctx.rootState.user.profile.token) {
+                    //  已登录
+                } else {
+                    // 未登录
+                    //TODO 找出选中的商品列表，通过遍历调用删除的mutations
+                    ctx.getters[isClear ? 'inValidList' : 'selectedList'].forEach(item => {
+                        ctx.commit('deleteCart', item.skuId)
                     })
                     resolve()
                 }
