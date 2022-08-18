@@ -3,7 +3,7 @@
  * @Author: JLX
  * @Date: 2022-07-21 17:05:39
  * @LastEditors: JLX
- * @LastEditTime: 2022-08-17 17:43:34
+ * @LastEditTime: 2022-08-18 09:17:24
  */
 
 import { getNewCartGoods } from "@/api/cart"
@@ -141,7 +141,9 @@ export default {
                     // TODO 已登录
                 } else {
                     // 未登录
-                    ctx.commit('updateCart', selected) //触发mutation的deleteCart方法
+                    ctx.getters.validList.forEach(goods => {
+                        ctx.commit('updateCart', { skuId: goods.skuId, selected })
+                    })
                     resolve()
                 }
             })

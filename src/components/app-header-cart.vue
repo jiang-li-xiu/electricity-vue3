@@ -3,7 +3,7 @@
  * @Author: JLX
  * @Date: 2022-08-17 08:50:11
  * @LastEditors: JLX
- * @LastEditTime: 2022-08-17 15:30:19
+ * @LastEditTime: 2022-08-18 10:04:29
 -->
 <template>
   <div class="cart">
@@ -40,7 +40,7 @@
             </div>
           </RouterLink>
           <!-- 删除功能 -->
-          <i @click="deleteCart(goods.skuId)" class="iconfont icon-zanting"></i>
+          <i @click="deleteCart(goods.skuId)" class="iconfont icon-guanbi"></i>
         </div>
       </div>
       <div class="foot">

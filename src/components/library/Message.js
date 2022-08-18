@@ -3,8 +3,10 @@
  * @Author: JLX
  * @Date: 2022-08-15 14:21:05
  * @LastEditors: JLX
- * @LastEditTime: 2022-08-15 14:54:24
+ * @LastEditTime: 2022-08-18 14:11:59
  */
+
+
 // 提供一个能够显示xtx-message组件的函数
 // 这个函数将来：导入直接使用，也可以挂载在vue实例原型上
 // 目标使用方式：
