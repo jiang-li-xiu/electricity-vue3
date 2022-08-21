@@ -2,8 +2,8 @@
  * @Descripttion: 
  * @Author: JLX
  * @Date: 2022-07-22 17:50:21
- * @LastEditors: JLX
- * @LastEditTime: 2022-08-15 17:51:05
+ * @LastEditors: jiang-li-xiu 2663282851@qq.com
+ * @LastEditTime: 2022-08-21 16:17:40
 -->
 <template>
   <nav class="app-topnav">
@@ -38,7 +38,7 @@
 <script>
 import { computed } from "@vue/runtime-core";
 import { useStore } from "vuex";
-import { useRouter } from 'vue-router';
+import { useRouter } from "vue-router";
 export default {
   name: "AppTopnav",
   setup() {
@@ -55,10 +55,12 @@ export default {
      *1. 清空本地存储信息和vuex的用户信息
      *2. 跳转登录
      */
-    const router = useRouter()
+    const router = useRouter();
     const logout = () => {
       store.commit("user/setUser", {});
-      router.push('/login')
+      // 清空购物车
+      store.dispatch("cart/setCart", {});
+      router.push("/login");
     };
 
     return {

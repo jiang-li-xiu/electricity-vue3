@@ -54,6 +54,11 @@
                       {{ goods.name }}
                     </p>
                     <!-- 选择规格组件 -->
+                    <CartSku
+                      @change="($event) => updateCartSku(goods.skuId, $event)"
+                      :skuId="goods.skuId"
+                      :attrsText="goods.attrsText"
+                    />
                   </div>
                 </div>
               </td>
@@ -68,7 +73,11 @@
               </td>
               <td class="tc">
                 <!-- 数量 -->
-                <XtxNumbox :modelValue="goods.count" />
+                <XtxNumbox
+                  @change="($event) => updateCount(goods.skuId, $event)"
+                  :max="goods.stock"
+                  :modelValue="goods.count"
+                />
               </td>
               <td class="tc">
                 <!-- 小计 -->
@@ -169,12 +178,13 @@
 // 组件
 import GoodRelevant from "@/views/goods/components/goods-relevant";
 import CartNone from "./components/cart-none.vue";
+import CartSku from "./components/cart-sku.vue";
 import { useStore } from "vuex";
 import Message from "@/components/library/Message";
 import Confirm from "@/components/library/Confirm";
 export default {
   name: "XtxCartPage",
-  components: { GoodRelevant, CartNone },
+  components: { GoodRelevant, CartNone, CartSku },
   setup() {
     const store = useStore();
     // 单选框事件
@@ -209,11 +219,23 @@ export default {
         .catch((e) => {});
     };
 
+    // 修改数量
+    const updateCount = (skuId, count) => {
+      store.dispatch("cart/updateCart", { skuId, count });
+    };
+
+    // 修改规格
+    const updateCartSku = (oldSkuId, newSku) => {
+      store.dispatch("cart/updateCartSku", { oldSkuId, newSku });
+    };
+
     return {
       checkOne,
       checkAll,
       deleteCart,
       batchDeleteCart,
+      updateCount,
+      updateCartSku,
     };
   },
 };

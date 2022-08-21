@@ -2,11 +2,11 @@
  * @Descripttion: 
  * @Author: JLX
  * @Date: 2022-07-21 17:05:39
- * @LastEditors: JLX
- * @LastEditTime: 2022-08-18 17:11:22
+ * @LastEditors: jiang-li-xiu 2663282851@qq.com
+ * @LastEditTime: 2022-08-21 16:12:47
  */
 
-import { getNewCartGoods } from "@/api/cart"
+import { getNewCartGoods, mergeCart } from "@/api/cart"
 
 // 购物车模块
 export default {
@@ -30,11 +30,11 @@ export default {
             if (sameIndex > -1) {
                 // 找到了相同商品
                 const count = state.list[sameIndex].count //数量
-                    // 累加之前数量
+                // 累加之前数量
                 payload.count += count
-                    // 删除原来
+                // 删除原来
                 state.list.splice(sameIndex, 1)
-                    // 追加新的
+                // 追加新的
                 state.list.unshift(payload)
             } else {
                 // 直接追加新的
@@ -57,6 +57,12 @@ export default {
             // 根据skuId删除
             const index = state.list.findIndex(item => item.skuId === skuId)
             state.list.splice(index, 1)
+        },
+
+        // **设置购物车
+        setCart(state, payload) {
+            // payload为空数据，清空. 为有值，设置。
+            state.list = payload
         }
 
     },
@@ -90,16 +96,16 @@ export default {
                     // Promise.resolve() Promise.reject() new Promise()
                     // Promise.race(promise数组).then((data)=>{}) 同时发请求 最快的请求成功，得到成功结果
                     const promisrArr = ctx.state.list.map(goods => {
-                            return getNewCartGoods(goods.skuId)
-                        })
-                        // results成功结果集合 数据顺序和PromiseArr顺序一致，它是根据state.list而来
+                        return getNewCartGoods(goods.skuId)
+                    })
+                    // results成功结果集合 数据顺序和PromiseArr顺序一致，它是根据state.list而来
                     Promise.all(promisrArr).then(results => {
                         // console.log(results);
                         // 更新本地购物车
                         results.forEach((data, index) => {
-                                ctx.commit('updateCart', { skuId: ctx.state.list[index].skuId, ...data.result })
-                            })
-                            // 调用resolve
+                            ctx.commit('updateCart', { skuId: ctx.state.list[index].skuId, ...data.result })
+                        })
+                        // 调用resolve
                         resolve()
                     })
 
@@ -162,6 +168,43 @@ export default {
                     resolve()
                 }
             })
+        },
+        // ** 修改规格
+        updateCartSku(ctx, { oldSkuId, newSku }) {
+            return new Promise((resolve, reject) => {
+                if (ctx.rootState.user.profile.token) {
+                    //  已登录
+                } else {
+                    // 未登录
+                    //TODO 找出旧的商品信息 
+                    // 2.删除旧的商品信息
+                    // 3.根据新的商品信息和旧的商品信息，合并成一条新的购物车商品信息
+                    // 4.添加新的商品
+                    const oldGoods = ctx.state.list.find(item => item.skuId === oldSkuId)
+                    ctx.commit('deleteCart', oldSkuId)
+                    const { skuId, price: nowPrice, specsText: attrsText, inventory: stock } = newSku
+                    const newGoods = { ...oldGoods, skuId, nowPrice, attrsText, stock }
+                    ctx.commit('insertCart', newGoods)
+                    resolve()
+
+                }
+            })
+        },
+        // ** 合并购物车
+        async mergeCart(ctx) {
+            // 合并的参数
+            const cartList = ctx.state.list.map(goods => {
+                return {
+                    skuId: goods.skuId,
+                    selected: goods.selected,
+                    count: goods.count
+                }
+            })
+            // 请求接口
+            await mergeCart(cartList)
+            // 合并成功 
+            // 清空本地购物车
+            ctx.commit('setCart', [])
         }
     },
     getters: {

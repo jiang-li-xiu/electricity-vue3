@@ -1,8 +1,8 @@
 <!--
  * @Author: jiang-li-xiu 2663282851@qq.com
  * @Date: 2022-08-14 14:11:33
- * @LastEditors: JLX
- * @LastEditTime: 2022-08-16 16:32:21
+ * @LastEditors: jiang-li-xiu 2663282851@qq.com
+ * @LastEditTime: 2022-08-21 16:38:36
  * @FilePath: \electricity-vue3\src\views\login\components\login-form.vue
  * @Description: 登录表单
 -->
@@ -148,7 +148,7 @@ export default {
   components: {
     Form,
     Field,
-    XtxMessage,
+    // XtxMessage,
   },
   // vue2
   // created(){
@@ -232,33 +232,6 @@ export default {
             const { account, password } = form;
             data = await userAccountLogin({ account, password });
             //   // 发起请求
-            //   userAccountLogin({ account, password })
-            //     .then((data) => {
-            //       // 把这些数据给vuex 存储
-            //       const { id, account, avatar, mobile, nickname, token } =
-            //         data.result;
-            //       store.commit("/user/setUser", {
-            //         id,
-            //         account,
-            //         avatar,
-            //         mobile,
-            //         nickname,
-            //         token,
-            //       });
-            //       // 进行跳转 跳转到之前的Url或首页
-            //       router.push(route.query.redirectUrl || "/");
-            //       // 成功消息提示
-            //       Message({ type: "success", text: "登录成功" });
-            //     })
-            //     .catch((e) => {
-            //       // 失败提示
-            //       if (e.response.data) {
-            //         Message({
-            //           type: "error",
-            //           text: e.response.data.message || "登录失败",
-            //         });
-            //       }
-            //     });
           }
           // 把这些数据给vuex 存储
           const { id, account, avatar, mobile, nickname, token } = data.result;
@@ -269,6 +242,13 @@ export default {
             mobile,
             nickname,
             token,
+          });
+          // 登录成功 清空本地购物车后再跳转
+          store.dispatch("cart/mergeCart").then(() => {
+            // 进行跳转 跳转到之前的Url或首页
+            router.push(route.query.redirectUrl || "/");
+            // 成功消息提示
+            Message({ type: "success", text: "登录成功" });
           });
           // localStorage.setItem(
           //   "user",
@@ -281,10 +261,6 @@ export default {
           //     token,
           //   })
           // );
-          // 进行跳转 跳转到之前的Url或首页
-          router.push(route.query.redirectUrl || "/");
-          // 成功消息提示
-          Message({ type: "success", text: "登录成功" });
         } catch (e) {
           // 失败提示
           if (e.response.data) {
@@ -339,7 +315,6 @@ export default {
      * 1. 准备span有id
      * 2. 通过 QC.login({btnId:'qqLoginBtn'})
      */
-    
 
     return {
       isMsgLogin,
